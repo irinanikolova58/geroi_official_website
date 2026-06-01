@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ГЕРОЙ — Платформата за кръводарители</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:    #000000;
+  --cream:    #fffbf0;
+  --blush:    #fedeel;
+  --crimson:  #70020f;
+  --petal:    #ffdee2;
+  --mauve:    #bd8681;
+  --taupe:    #caaa98;
+  --stone:    #d2c1b6;
+  --white:    #ffffff;
+
+  /* functional aliases */
+  --bg:       var(--cream);
+  --fg:       var(--black);
+  --accent:   var(--crimson);
+  --subtle:   #6b5c56;
+  --hairline: rgba(112,2,15,0.12);
+
+  --font-display: 'Courier Prime', 'Courier New', monospace;
+  --font-body:    'Archivo', sans-serif;
+  --nav-h: 58px;
+  --pad: clamp(20px, 6vw, 96px);
+  --max: 1200px;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 300;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad);
+  background: rgba(255,251,240,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--hairline);
+  transition: background 0.4s;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  color: var(--fg);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.nav-links a:hover { color: var(--crimson); }
+
+.nav-cta {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+  color: var(--white) !important;
+  background: var(--crimson) !important;
+  padding: 8px 20px;
+  border-radius: 100px;
+  transition: opacity 0.25s !important;
+}
+.nav-cta:hover { opacity: 0.85 !important; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--nav-h) + 60px) var(--pad) 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle radial atmosphere */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(255,222,226,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(189,134,129,0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.15s forwards;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(52px, 8vw, 100px);
+  line-height: 0.95;
+  letter-spacing: -1px;
+  color: var(--fg);
+  margin-bottom: 0;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.3s forwards;
+  position: relative;
+  z-index: 1;
+}
+
+h1 .line-italic {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--crimson);
+  display: block;
+}
+
+h1 .line-bold {
+  font-weight: 700;
+  display: block;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  font-size: 1em;
+}
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.75;
+  max-width: 500px;
+  margin: 36px auto 0;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.55s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.7s forwards;
+  flex-wrap: wrap;
+}
+
+.btn-fill {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--white);
+  background: var(--crimson);
+  padding: 14px 36px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.btn-fill:hover { opacity: 0.85; transform: translateY(-2px); }
+
+.btn-ghost {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.18);
+  padding: 14px 32px;
+  border-radius: 100px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: border-color 0.25s, color 0.25s, transform 0.25s;
+}
+.btn-ghost:hover { border-color: var(--crimson); color: var(--crimson); transform: translateY(-2px); }
+
+/* hero stat strip */
+.hero-strip {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 80px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.9s forwards;
+  width: 100%;
+  max-width: 640px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-strip-item {
+  flex: 1;
+  text-align: center;
+  padding: 24px 16px;
+  border-right: 1px solid var(--hairline);
+}
+.hero-strip-item:last-child { border-right: none; }
+
+.strip-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 38px;
+  color: var(--crimson);
+  line-height: 1;
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: -1px;
+}
+.strip-label {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  color: var(--subtle);
+  line-height: 1.5;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION BASE ── */
+section {
+  padding: 112px var(--pad);
+  position: relative;
+}
+
+.container { max-width: var(--max); margin: 0 auto; }
+
+.s-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 20px;
+  display: block;
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.5px;
+  color: var(--fg);
+  margin-bottom: 20px;
+}
+h2 em {
+  font-style: italic;
+  color: var(--crimson);
+}
+h2 strong {
+  font-weight: 700;
+}
+
+.section-lead {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.8;
+  max-width: 560px;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--hairline);
+  margin: 0;
+}
+
+/* ── PROBLEM ── */
+#problem {
+  background: var(--black);
+  color: var(--white);
+}
+
+#problem .s-eyebrow { color: var(--petal); }
+#problem h2 { color: var(--white); }
+#problem h2 em { color: var(--petal); }
+#problem .section-lead { color: rgba(255,255,255,0.55); }
+
+.problem-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-top: 64px;
+  align-items: start;
+}
+
+.problem-body p {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+.problem-body p strong { color: var(--petal); font-weight: 500; }
+
+.prob-stats { display: flex; flex-direction: column; gap: 1px; }
+
+.prob-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  transition: all 0.3s;
+}
+.prob-item:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+.prob-item:hover { padding-left: 12px; }
+
+.prob-n {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 40px;
+  color: var(--petal);
+  line-height: 1;
+}
+.prob-t { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+.prob-t strong { color: rgba(255,255,255,0.9); font-weight: 500; display: block; margin-bottom: 3px; font-size: 14px; }
+
+/* ── SOLUTION ── */
+#solution { background: var(--bg); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 64px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.feature-card {
+  background: var(--bg);
+  padding: 44px 36px;
+  transition: background 0.3s;
+  cursor: default;
+}
+.feature-card:hover { background: var(--petal); }
+
+.feat-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 24px;
+}
+.feat-icon svg {
+  width: 36px; height: 36px;
+  stroke: var(--crimson);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.2px;
+  color: var(--fg);
+  margin-bottom: 12px;
+}
+.feature-card p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.75;
+}
+.feat-tag {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--crimson);
+  border-bottom: 1px solid var(--crimson);
+  padding-bottom: 2px;
+}
+
+/* ── HOW ── */
+#how { background: var(--cream); }
+#how::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 80% 60%, rgba(255,222,226,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 64px;
+  position: relative;
+  z-index: 1;
+}
+
+/* connecting line */
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: calc(12.5%);
+  right: calc(12.5%);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mauve), var(--mauve), transparent);
+  z-index: 0;
+}
+
+.step {
+  padding: 0 28px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.step-n-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.step:hover .step-n-wrap { background: var(--crimson); border-color: var(--crimson); }
+
+.step-n {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--crimson);
+  line-height: 1;
+  transition: color 0.3s;
+}
+.step:hover .step-n { color: var(--white); }
+
+.step h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--fg);
+  margin-bottom: 10px;
+  letter-spacing: -0.1px;
+}
+.step p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.75;
+}
+
+/* ── VALIDATION ── */
+#validation { background: var(--bg); }
+
+.val-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin-top: 64px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.val-item {
+  background: var(--bg);
+  padding: 64px 48px;
+  text-align: center;
+  transition: background 0.3s;
+}
+.val-item:hover { background: var(--petal); }
+
+.val-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 80px;
+  color: var(--crimson);
+  letter-spacing: -3px;
+  line-height: 1;
+  display: block;
+  margin-bottom: 16px;
+}
+.val-label {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.7;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+
+
+/* ── SIGNUP ── */
+#signup { background: var(--bg); }
+
+.signup-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 96px;
+  align-items: start;
+}
+
+.signup-left {}
+.signup-left .section-lead { margin-top: 16px; }
+
+.signup-note {
+  margin-top: 40px;
+  padding: 24px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.8;
+  background: rgba(112,2,15,0.02);
+}
+.signup-note strong { color: var(--crimson); font-weight: 500; }
+
+/* form */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--hairline);
+  border-right: 1px solid var(--hairline);
+  position: relative;
+}
+.form-field:last-child,
+.form-row-2 .form-field:last-child { border-right: none; }
+.signup-form > .form-field { border-right: none; }
+
+.form-field label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--mauve);
+  padding: 16px 20px 4px;
+  display: block;
+}
+
+.form-field input,
+.form-field select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  padding: 4px 20px 16px;
+  background: transparent;
+  border: none;
+  color: var(--fg);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.form-field input::placeholder { color: rgba(0,0,0,0.3); }
+.form-field select option { background: var(--white); color: var(--fg); }
+
+.form-field:focus-within {
+  background: rgba(255,222,226,0.3);
+}
+
+.form-submit {
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-disclaimer {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--subtle);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.form-btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--crimson);
+  border: none;
+  padding: 13px 32px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: opacity 0.25s, transform 0.25s;
+  white-space: nowrap;
+}
+.form-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* ── CONTACT ── */
+#contact { background: var(--black); color: var(--white); }
+#contact .s-eyebrow { color: var(--petal); }
+#contact h2 { color: var(--white); }
+#contact h2 em { color: var(--petal); }
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 96px;
+  align-items: start;
+}
+
+.contact-left p {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.9;
+  margin-top: 16px;
+  margin-bottom: 40px;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.contact-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.contact-info-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mauve);
+}
+.contact-info-value {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.75);
+}
+.contact-info-value a {
+  color: var(--petal);
+  text-decoration: none;
+}
+.contact-info-value a:hover { opacity: 0.8; }
+
+/* contact form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+}
+
+.contact-form .form-field {
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-right: 1px solid rgba(255,255,255,0.07);
+  background: transparent;
+}
+
+.contact-form .form-field label {
+  color: var(--mauve);
+}
+
+.contact-form .form-field input,
+.contact-form .form-field textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  padding: 4px 20px 16px;
+  background: transparent;
+  border: none;
+  color: var(--white);
+  outline: none;
+  width: 100%;
+}
+.contact-form .form-field input::placeholder,
+.contact-form .form-field textarea::placeholder { color: rgba(255,255,255,0.25); }
+.contact-form .form-field textarea {
+  min-height: 120px;
+  resize: none;
+}
+.contact-form .form-field:focus-within {
+  background: rgba(255,222,226,0.06);
+}
+
+.contact-form .form-submit {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: transparent;
+}
+.contact-form .form-disclaimer { color: rgba(255,255,255,0.3); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black);
+  padding: 56px var(--pad) 40px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--petal);
+}
+.footer-tagline {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+.footer-bottom {
+  max-width: var(--max);
+  margin: 40px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.3px;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+
+/* ── SUCCESS ── */
+.form-success {
+  display: none;
+  padding: 32px;
+  text-align: center;
+}
+.form-success p {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--crimson);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+.form-success .check {
+  font-size: 40px;
+  display: block;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 860px) {
+  .nav-links { display: none; }
+  .problem-layout,
+  .signup-layout,
+  .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .steps::before { display: none; }
+  .val-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .form-row-2 { grid-template-columns: 1fr; }
+  .hero-strip { flex-direction: column; max-width: 260px; }
+  .hero-strip-item { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .hero-strip-item:last-child { border-bottom: none; }
+}
+
+@media (max-width: 520px) {
+  .steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="#hero">ГЕРОЙ</a>
+  <ul class="nav-links">
+    <li><a href="#problem">Проблемът</a></li>
+    <li><a href="#solution">Решението</a></li>
+    <li><a href="#how">Как работи</a></li>
+    <li><a href="#signup" class="nav-cta">Регистрирай се</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <p class="hero-eyebrow">Дари кръв | Стани ГЕРОЙ | Спаси живот |</p>
+  <h1>
+    <span class="line-italic">Бъди</span>
+    <span class="line-bold">Герой</span>
+  </h1>
+  <p class="hero-sub">Свързваме кръводарители с хора, на които е нужна помощ — бързо, прозрачно и с грижа за всеки. Нашата платформа, превръща кръводаряването от задължение в навик, създавайки общност и давайки истинска мотивация на хората. </p>
+  <div class="hero-actions">
+    <a href="#signup" class="btn-fill">Регистрирай се сега</a>
+    <a href="#problem" class="btn-ghost">Научи повече</a>
+  </div>
+
+</section>
+
+<hr class="divider">
+
+<!-- ── PROBLEM ── -->
+<section id="problem">
+  <div class="container">
+    <span class="s-eyebrow reveal">Проблемът</span>
+    <h2 class="reveal reveal-d1">България има<br><em>нужда от промяна.</em></h2>
+    <p class="section-lead reveal reveal-d2">Системата на кръводаряване в България е раздробена, неефективна и разчита на случайност — ние искаме да я преосмислим изцяло.</p>
+
+    <div class="problem-layout">
+      <div class="problem-body reveal">
+        <p>Страната ни разполага с 28 национални центъра за кръводаряване и добра инфраструктура — но все пак е сред последните в ЕС по брой активни дарители.</p>
+        <p>Проблемът не е липса на желание. Хората не са организирани. Няма система, която да ги напомня, мотивира и свързва с болниците навреме.
+Болниците разчитат на спешни кампании вместо на стабилна база от редовни дарители. Животи висят на косъм — не от липса на хора, а от липса на координация и стимул. <strong>Ние от ГЕРОЙ искаме да сложим край на нелегалния пазар за кръв и отчаяните спешни призиви за полощ във Фейсбук.</strong> </p>
+        <p>Резултатът? Стотици <strong>отложени животоспасяващи операции</strong> и хора, оставени без кръв в критичен момент. Ние вярваме, че това може да се промени.</p>
+      </div>
+      <div class="prob-stats reveal reveal-d2">
+        <div class="prob-item">
+          <span class="prob-n">0.1%</span>
+          <div class="prob-t">
+            <strong>Дарители в България</strong>
+            Световната здравна организация препоръчва минимум 1% от популацията да дарява кръв ежегодно
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-n">3</span>
+          <div class="prob-t">
+            <strong>Живота на едно дарение</strong>
+            Едно даряване спасява до 3 живота
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-n">23</span>
+          <div class="prob-t">
+            <strong>В страната ни даряват само 23 на 1000 човека</strong>
+            Европейският стандарт е 55 на 1000
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-n">∞</span>
+          <div class="prob-t">
+            <strong>Пропуснати спасявания</strong>
+            Липсата на организация коства човешки животи всяка година
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── SOLUTION ── -->
+<section id="solution">
+  <div class="container">
+    <span class="s-eyebrow reveal">Решението</span>
+    <h2 class="reveal reveal-d1">Какво прави<br><em>ГЕРОЙ</em> различен</h2>
+    <p class="section-lead reveal reveal-d2">Изграждаме първата интегрирана платформа в България, която свързва дарители, круводарителни центрове и кампании на едно място.</p>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Профил на дарителя</h3>
+        <p>Лична история, напомняния и проследяване на всяко дарение — всичко на едно място, достъпно по всяко време.</p>
+        <span class="feat-tag">За дарители</span>
+      </div>
+
+      <div class="feature-card reveal reveal-d1">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <h3>Свързаност с болниците</h3>
+        <p>Реално-времева информация за нуждите на болниците в цялата страна — дарителят знае точно кога е необходим.</p>
+        <span class="feat-tag">За системата</span>
+      </div>
+
+      <div class="feature-card reveal reveal-d2">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.1 3.38 2 2 0 0 1 3.08 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.13a16 16 0 0 0 6 6l.41-.41a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <h3>Спешни известия</h3>
+        <p>Известия на твоя телефон при критична нужда от конкретна кръвна група в близост до дарителя.</p>
+        <span class="feat-tag">Спешни случаи</span>
+      </div>
+
+      <div class="feature-card reveal reveal-d1">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Напомняния и история</h3>
+        <p>Автоматични напомняния след изтичане на срока, в който не можеш да даряваш — никога повече пропуснато дарение.</p>
+        <span class="feat-tag">Проследяване</span>
+      </div>
+
+      <div class="feature-card reveal reveal-d2">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>Признание и награди</h3>
+        <p>Значки, сертификати и обществено признание за редовните дарители — героите получават своето признание и награди.</p>
+        <span class="feat-tag">Геймификация</span>
+      </div>
+
+      <div class="feature-card reveal reveal-d3">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>Данни и прозрачност</h3>
+        <p>Публичен дашборд с реалните нужди на системата — видимост, която изгражда доверие.</p>
+        <span class="feat-tag">Прозрачност</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── HOW ── -->
+<section id="how">
+  <div class="container">
+    <span class="s-eyebrow reveal">Как работи</span>
+    <h2 class="reveal reveal-d1">Четири стъпки<br>Една общност<br><em>Безкрайно</em> въздействие <br></h2>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-n-wrap"><span class="step-n">1</span></div>
+        <h4>Регистрирай се</h4>
+        <p>Създай профил с твоята кръвна група, местоположение и контакти за по-малко от 2 минути.</p>
+      </div>
+      <div class="step reveal reveal-d1">
+        <div class="step-n-wrap"><span class="step-n">2</span></div>
+        <h4>Получи известие</h4>
+        <p>При нужда в болница или спешен случай в твоя район ще получиш известие на товя телефон.</p>
+      </div>
+      <div class="step reveal reveal-d2">
+        <div class="step-n-wrap"><span class="step-n">3</span></div>
+        <h4>Дари кръв и спаси живот</h4>
+        <p>След всяко кръводаряване печелиш точки, с които не само вдигаш нива, но и изкачваш класацията и следиш прогреса си в нашата платформа.</p>
+      </div>
+      <div class="step reveal reveal-d3">
+        <div class="step-n-wrap"><span class="step-n">4</span></div>
+        <h4>Получи наградата си</h4>
+        <p>След всяко даряване получаваш не само удовлетворението от това, че си спасил живот, но и отстъпки и награди от партньорски компании — кафенета, ресторанти и вериги.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── VALIDATION ── -->
+<section id="validation">
+  <div class="container">
+    <span class="s-eyebrow reveal">Валидация</span>
+    <h2 class="reveal reveal-d1">Числата говорят<br><em>сами</em></h2>
+    <p class="section-lead reveal reveal-d2">Проведохме първично проучване, същоящо се от над 700 човека. Отговорите потвърдиха нуждата от ГЕРОЙ.</p>
+
+    <div class="val-grid">
+      <div class="val-item reveal">
+        <span class="val-num">70%</span>
+        <p class="val-label">от анкетираните биха дарвали по-редовно, ако имаха лесен начин да бъдат известени и да проследят дарението си.</p>
+      </div>
+      <div class="val-item reveal reveal-d1">
+        <span class="val-num">100%</span>
+        <p class="val-label">от болниците в страната изпитват периодичен недостиг на кръв и биха използвали централизирана платформа за управление на заявки.</p>
+      </div>
+      <div class="val-item reveal reveal-d2">
+        <span class="val-num">3×</span>
+        <p class="val-label">по-голяма задържаност на редовни дарители показват платформи с геймификация и лично проследяване спрямо традиционния модел.</p>
+      </div>
+      <div class="val-item reveal reveal-d3">
+        <span class="val-num">20к+</span>
+        <p class="val-label">потенциални дарители в България са активни в онлайн общностите, посветени на кръводаряването — без единна платформа да ги свързва.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ── SIGNUP ── -->
+<section id="signup">
+  <div class="container">
+    <div class="signup-layout">
+      <div class="signup-left reveal">
+        <span class="s-eyebrow">Предварителна регистрация</span>
+        <h2>Бъди<br><em>първи.</em></h2>
+        <p class="section-lead">Платформата е в процес на изграждане. Регистрирай се сега и ще бъдеш сред първите, които получат достъп.</p>
+        <div class="signup-note">
+          <strong>Защо се регистрирам предварително?</strong><br>
+          Предрегистрираните получават ранен достъп, ексклузивен „Основател" бадж и пряка линия за обратна връзка с екипа. Всеки глас е важен за оформянето на продукта.
+        </div>
+      </div>
+
+      <div class="reveal reveal-d2">
+        <form class="signup-form" id="signupForm">
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="s_name">Първо Име</label>
+              <input type="text" id="s_name" name="firstName" placeholder="Иван" required>
+            </div>
+            <div class="form-field">
+              <label for="s_lname">Фамилия</label>
+              <input type="text" id="s_lname" name="lastName" placeholder="Иванов" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="s_email">Имейл адрес</label>
+            <input type="email" id="s_email" name="email" placeholder="ivan@example.com" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="s_blood">Кръвна група</label>
+              <select id="s_blood" name="bloodType">
+                <option value="">Изберете</option>
+                <option>A+</option><option>A−</option>
+                <option>B+</option><option>B−</option>
+                <option>AB+</option><option>AB−</option>
+                <option>0+</option><option>0−</option>
+                <option>Не знам</option>
+				<option>Не искам да посочвам</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="s_city">Град</label>
+              <input type="text" id="s_city" name="city" placeholder="София">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="s_role">Роля</label>
+            <select id="s_role" name="role">
+              <option value="">Изберете роля</option>
+              <option>Искам да дарявам</option>
+              <option>Нуждая се от кръв</option>
+              <option>Представлявам болница / организация</option>
+              <option>Искам да съм информиран</option>
+            </select>
+          </div>
+          <div class="form-submit">
+            <p class="form-disclaimer">Данните ти са защитени. Няма да ги споделяме с трети страни.</p>
+            <button type="submit" class="form-btn">Регистрирай се →</button>
+          </div>
+          <div class="form-success" id="signupSuccess">
+            <span class="check">✓</span>
+            <p>Благодарим ти!<br>Ще те уведомим при старта.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-layout">
+      <div class="contact-left reveal">
+        <span class="s-eyebrow">Контакти</span>
+        <h2>Свържи се<br><em>с нас.</em></h2>
+        <p>Имаш въпроси, предложения или искаш да партнираш с ГЕРОЙ? Ще се радваме да чуем от теб.</p>
+        <div class="contact-info">
+          <div class="contact-info-item">
+            <span class="contact-info-label">Имейл</span>
+            <span class="contact-info-value"><a href="mailto:contact.geroi@gmail.com">contact.geroi@gmail.com</a></span>
+          </div>
+          <div class="contact-info-item">
+            <span class="contact-info-label">Социални мрежи</span>
+			            <span class="contact-info-value"><a href="https://www.instagram.com/geroiorganization/" target="_blank">Instagram</a></span>
+						<span class="contact-info-value"><a href="https://www.facebook.com/share/18kAKdDVuh/?mibextid=wwXIfr" target="_blank">Facebook</a></span>
+						<span class="contact-info-value"><a href="https://www.linkedin.com/company/geroi-organization/" target="_blank">LinkedIn</a></span>
+          </div>
+          <div class="contact-info-item">
+            <span class="contact-info-label">Партньорства</span>
+            <span class="contact-info-value"><a href="mailto:contact.geroi@gmail.com">contact.geroi@gmail.com</a></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-d2">
+        <form class="contact-form" id="contactForm">
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="c_name">Иметo ти</label>
+              <input type="text" id="c_name" name="name" placeholder="Иван Иванов" required>
+            </div>
+            <div class="form-field">
+              <label for="c_email">Имейл</label>
+              <input type="email" id="c_email" name="email" placeholder="ivan@example.com" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="c_subject">Тема</label>
+            <input type="text" id="c_subject" name="subject" placeholder="Партньорство, въпрос, предложение...">
+          </div>
+          <div class="form-field">
+            <label for="c_msg">Съобщение</label>
+            <textarea id="c_msg" name="message" placeholder="Напиши ни..." required></textarea>
+          </div>
+          <div class="form-submit">
+            <p class="form-disclaimer">Отговаряме до 48 часа в работни дни.</p>
+            <button type="submit" class="form-btn">Изпрати →</button>
+          </div>
+          <div class="form-success" id="contactSuccess">
+            <span class="check">✓</span>
+            <p>Получихме съобщението ти.<br>Ще се свържем скоро.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">ГЕРОЙ</div>
+      <div class="footer-tagline">Платформата за кръводарители в България</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#problem">Проблемът</a></li>
+      <li><a href="#solution">Решението</a></li>
+      <li><a href="#how">Как работи</a></li>
+      <li><a href="geroi-team.html">Екипът</a></li>
+      <li><a href="#signup">Регистрация</a></li>
+      <li><a href="geroi-team.html">Екипът</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 ГЕРОЙ. Всички права запазени.</span>
+    <span class="footer-copy"><a href="mailto:contact.geroi@gmail.com" style="color:inherit;text-decoration:none;">contact.geroi@gmail.com</a></span>
+  </div>
+</footer>
+
+<script>
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── NAV SCROLL STYLE ── */
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.style.background = window.scrollY > 20
+    ? 'rgba(255,251,240,0.96)'
+    : 'rgba(255,251,240,0.88)';
+});
+
+/* ── MAILTO FORM HANDLER ── */
+function handleMailtoForm(formId, successId, isContact) {
+  const form = document.getElementById(formId);
+  const success = document.getElementById(successId);
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const to = 'contact.geroi@gmail.com';
+    let subject, body;
+
+    if (isContact) {
+      subject = encodeURIComponent((data.get('subject') || 'Съобщение от сайта') + ' — ГЕРОЙ');
+      body = encodeURIComponent(
+        `От: ${data.get('name')} <${data.get('email')}>\n\n${data.get('message')}`
+      );
+    } else {
+      subject = encodeURIComponent('Предварителна регистрация — ГЕРОЙ');
+      body = encodeURIComponent(
+        `Ново регистриране:\n\nИме: ${data.get('firstName')} ${data.get('lastName')}\nИмейл: ${data.get('email')}\nКръвна група: ${data.get('bloodType') || '—'}\nГрад: ${data.get('city') || '—'}\nРоля: ${data.get('role') || '—'}`
+      );
+    }
+
+    window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_blank');
+
+    // Show success
+    form.querySelectorAll('.form-field, .form-row-2, .form-submit').forEach(el => {
+      el.style.display = 'none';
+    });
+    success.style.display = 'block';
+  });
+}
+
+handleMailtoForm('signupForm', 'signupSuccess', false);
+handleMailtoForm('contactForm', 'contactSuccess', true);
+</script>
+</body>
+</html>
